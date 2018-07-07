@@ -1,0 +1,15 @@
+{
+  "name": "viseoToolbox",
+  "version": "0.0.1",
+  "description": "Toolbox Viseo developper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gSnippets": "npm install /home/esteban/www-dev/generatorsnippets; node ./index.js"
+  },
+  "author": "esteban.rios@viseo.com",
+  "license": "MIT",
+  "devDependencies": {
+    "generatorsnippets": "file:../generatorsnippets"
+  }
+}
