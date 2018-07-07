@@ -1,10 +1,12 @@
-Snippets Generator
+Viseo Toolbox
 =========
 
-Simple projet to use `generatorsnippets` npm module to generate snippets for vscode & sublimeText
+Simple toolbox for viseo teams 
+### FEATURES 
+- Example of use `generatorsnippets` npm module to generate snippets for vscode & sublimeText
 
 
-#### Instal dependencies
+#### Instal dependencies unavailables in npm repositories
 ```shell
   git clone https://github.com/estebanMex/generatorsnippets.git
 ```
@@ -13,7 +15,10 @@ Simple projet to use `generatorsnippets` npm module to generate snippets for vsc
 ```shell
   git clone https://github.com/estebanMex/viseoToolbox.git
   cd viseoToolbox
-  npm install /home/USER/generatorsnippets --save-dev
+  # install dependecies
+  npm install
+  # Instal dependencies unavailables in npm repositories
+  npm install /home/USER/generatorsnippets
 ```
 
 **Edit package.json**
