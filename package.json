@@ -1,15 +1,23 @@
 {
-  "name": "viseoToolbox",
+  "name": "viseotoolbox",
   "version": "0.0.1",
   "description": "Toolbox Viseo developper",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gSnippets": "npm install /home/esteban/www-dev/generatorsnippets; node ./index.js"
+    "gSnippets": "node ./index.js"
   },
-  "author": "esteban.rios@viseo.com",
+  "author": "esteban2web@gmail.com",
   "license": "MIT",
-  "devDependencies": {
-    "generatorsnippets": "file:../generatorsnippets"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/estebanMex/viseoToolbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/estebanMex/viseoToolbox/issues"
+  },
+  "homepage": "https://github.com/estebanMex/viseoToolbox#readme",
+  "dependencies": {
+    "generatorsnippets": "^1.0.2"
   }
 }
