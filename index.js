@@ -1,33 +1,75 @@
-const modulesFilePath = '/home/esteban/www-dev/rimowa-ecom/cartridges/app_rimowa_core/cartridge/templates/default/util/modules.isml';
-// const snippetVscodePathOutput = '/home/esteban/.config/Code/User/snippets/isml.json';
+fs = require('fs');
 
-const snippetVscodePathOutput = process.cwd() + '/snippets/isml.json';
-const snippetSublimeTextPathOutput = process.cwd() + '/snippets/sublimeSnippets.txt';
-const editorTarget = undefined; // ['vscode' | 'sublimetext']
+let Generatorsnippets = require('generatorsnippets');
+
+const modulesFilePath = '/home/esteban/www-dev/rimowa-ecom/cartridges/app_rimowa_core/cartridge/templates/default/util/modules.isml';
+
+const snippetVscodePathOutput = process.cwd() + '/snippets/vscode/isml.json';
+const snippetSublimeTextPathOutput = process.cwd() + '/snippets/sublimetext/';
+const editorTarget = 'sublimetext'; // ['vscode' | 'sublimetext']
 let snippetPathOutput;
 
-fs = require('fs')
-fs.readFile(modulesFilePath, 'utf8', function (err, data) {
-    if (err) {
-        return console.log(err);
+const _PATHS = {
+    vscode: {
+        output: snippetVscodePathOutput
+    },
+    sublimetext: {
+        output: snippetSublimeTextPathOutput
+    }
+};
+
+// Start generate snippets
+generateSnippets(modulesFilePath, editorTarget, _PATHS);
+
+//  methods
+function generateSnippets(modulesFilePath, editorTarget, _PATHS) {
+    fs.readFile(modulesFilePath, 'utf8', function (err, data) {
+        if (err) {
+            return console.log(err);
+        }
+
+        let snippets = getSnippets(data);
+
+        factoryWritter(editorTarget, _PATHS)(snippets);
+    });
+}
+
+function factoryWritter(editorTarget, _PATHS) {
+    let writter;
+    let writters = {
+        vscode: vsCodeWritter,
+        sublimetext: sublimeTextWritter
     }
 
-    var snippetCollection = snippets(data, editorTarget);
-
-    if (!editorTarget || editorTarget === 'vscode') {
-        writeSnippets(snippetVscodePathOutput, '{\n' + snippetCollection.join(',\n') + '\n}' + '\n');
-
-    } else if (editorTarget === 'sublimetext') {
-        writeSnippets(snippetSublimeTextPathOutput, snippetCollection.join('\n'));
+    var options = {
+        output: _PATHS[editorTarget] ? _PATHS[editorTarget].output : _PATHS.vscode.output
     }
-});
+
+    // if the writter exist if not vscode is defautl
+    writter = writters[editorTarget] ? writters[editorTarget] : writters.vscode;
+
+    return writter.bind(options);
+}
+
+function vsCodeWritter(snippets) {
+    writeSnippetFile(this.output, '{\n' + snippets.generateAllSnippets().join(',\n') + '\n}' + '\n');
+}
+
+function sublimeTextWritter(snippets) {
+    let pathbase = this.output;
+
+    snippets.modules.forEach(module => {
+        let pathOutputFile = pathbase + 'is' + module.name + '.sublime-snippet';
+        writeSnippetFile(pathOutputFile, snippets.generateSnippet(module));
+    });
+}
 
 /**
  * write file snippets
  * @param {pathSystem} targetPath 
  * @param {string} snippetsString 
  */
-function writeSnippets(targetPath, snippetsString) {
+function writeSnippetFile(targetPath, snippetsString) {
 
     fs.writeFile(targetPath, snippetsString, function (err) {
         if (err) throw err;
@@ -51,7 +93,7 @@ function writeSnippets(targetPath, snippetsString) {
  */
 function generateSuiteChars(nb, char) {
     try {
-        return (new Array(nb).join(char))   
+        return (new Array(nb).join(char))
     } catch (error) {
         console.log(nb, char)
         console.log(error);
@@ -59,14 +101,8 @@ function generateSuiteChars(nb, char) {
     }
 }
 
-function snippets(dataFilecomposants, editorTarget) {
-    var Generatorsnippets = require('generatorsnippets')
+function getSnippets(dataFilecomposants, editorTarget) {
     // create a instances
-    var generatorsnippets = new Generatorsnippets(dataFilecomposants)
-
-    // generate an array with all snippets
-    generatorsnippets.editorTarget = editorTarget || 'vscode';
-    var allSnippetsInArray = generatorsnippets.generateAllSnippets();
-
-    return allSnippetsInArray;
+    var generatorsnippets = new Generatorsnippets(dataFilecomposants);
+    return generatorsnippets;
 }
